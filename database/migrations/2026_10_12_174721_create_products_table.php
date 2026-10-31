@@ -13,25 +13,20 @@ return new class extends Migration
 {
     Schema::create('products', function (Blueprint $table) {
         $table->id();
-        $table->string('name');
-        $table->string('sku')->unique(); // Stock Keeping Unit
-        
-        // Foreign Keys linking to your previous tables
-        $table->foreignId('category_id')->constrained()->onDelete('cascade');
-        $table->foreignId('brand_id')->constrained()->onDelete('cascade');
-        $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
-        
-        $table->decimal('purchase_price', 10, 2);
-        $table->decimal('selling_price', 10, 2);
-        $table->integer('stock_quantity')->default(0); // Current stock level
-        
-        // Using an enum status similar to your schema design
-        $table->enum('status', ['draft', 'active', 'inactive', 'archived'])->default('active');
-        
+        $table->foreignId('category_id')->constrained()->restrictOnDelete();
+        $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
+        $table->foreignId('base_unit_id')->constrained('units')->restrictOnDelete();
+        $table->string('product_code', 50)->unique();
+        $table->string('name', 180);
+        $table->string('slug', 200)->unique();
+        $table->text('description')->nullable();
+        $table->string('status', 20)->default('draft'); // draft, active, inactive, archived
+        $table->boolean('track_inventory')->default(true);
+        $table->boolean('is_sellable')->default(true);
+        $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
         $table->timestamps();
     });
 }
-
     /**
      * Reverse the migrations.
      */

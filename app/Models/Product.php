@@ -10,18 +10,25 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'sku',
         'category_id',
         'brand_id',
-        'supplier_id',
-        'purchase_price',
-        'selling_price',
-        'stock_quantity',
+        'base_unit_id',
+        'product_code',
+        'name',
+        'slug',
+        'description',
         'status',
+        'track_inventory',
+        'is_sellable',
+        'created_by',
     ];
 
-    // Relationships back to parent tables
+    protected $casts = [
+        'track_inventory' => 'boolean',
+        'is_sellable'     => 'boolean',
+    ];
+
+    // Parent relationships
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -32,8 +39,24 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function supplier()
+    public function unit()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Unit::class, 'base_unit_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Child relationships
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }

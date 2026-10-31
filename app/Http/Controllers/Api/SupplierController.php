@@ -25,7 +25,8 @@ class SupplierController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'address' => 'nullable|string',
-        ]);
+            'supplier_code' => 'required|string|max:40|unique:suppliers,supplier_code',
+            ]);
 
         $supplier = Supplier::create($validated);
 
