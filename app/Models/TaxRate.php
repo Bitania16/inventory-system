@@ -13,5 +13,7 @@ class TaxRate extends Model
     protected $casts = [
         'is_inclusive' => 'boolean',
         'is_active'    => 'boolean',
-    ];
+   'effective_from' => 'date',
+'effective_to'   => 'date',
+        ];
 }

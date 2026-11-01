@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Api\CrudController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -65,5 +65,12 @@ Route::get('customers/{customer}/statement', [CustomerController::class, 'statem
 
 // Customer payments
 Route::post('payments', [PaymentController::class, 'store']);
-
+// Simple CRUD tables (see config/crud.php)
+foreach (array_keys(config('crud')) as $slug) {
+    Route::get($slug, [CrudController::class, 'index'])->defaults('resource', $slug);
+    Route::post($slug, [CrudController::class, 'store'])->defaults('resource', $slug);
+    Route::get("$slug/{id}", [CrudController::class, 'show'])->defaults('resource', $slug);
+    Route::put("$slug/{id}", [CrudController::class, 'update'])->defaults('resource', $slug);
+    Route::delete("$slug/{id}", [CrudController::class, 'destroy'])->defaults('resource', $slug);
+}
 });
