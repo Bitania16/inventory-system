@@ -16,8 +16,12 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\CrudController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\StockAdjustmentController;
+use App\Http\Controllers\Api\SaleReturnController;
+use App\Http\Controllers\Api\SupplierPaymentController;
+use App\Http\Controllers\Api\OnlineOrderController;
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-// Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -90,4 +94,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put("$slug/{id}", [CrudController::class, 'update'])->defaults('resource', $slug);
         Route::delete("$slug/{id}", [CrudController::class, 'destroy'])->defaults('resource', $slug);
     }
-});
+        // Returns and refunds
+    Route::get('returns', [SaleReturnController::class, 'index']);
+    Route::post('returns', [SaleReturnController::class, 'store']);
+    Route::get('returns/{return}', [SaleReturnController::class, 'show']);
+    Route::post('returns/{return}/approve', [SaleReturnController::class, 'approve']);
+    Route::post('returns/{return}/reject', [SaleReturnController::class, 'reject']);
+    Route::post('returns/{return}/receive', [SaleReturnController::class, 'receive']);
+    Route::post('returns/{return}/refund', [SaleReturnController::class, 'refund']);
+    // Supplier payments
+    Route::get('supplier-payments', [SupplierPaymentController::class, 'index']);
+    Route::post('supplier-payments', [SupplierPaymentController::class, 'store']);
+    Route::get('supplier-payments/{supplierPayment}', [SupplierPaymentController::class, 'show']);
+   
+       // Online orders and shipments
+    Route::get('orders', [OnlineOrderController::class, 'index']);
+    Route::post('orders', [OnlineOrderController::class, 'store']);
+    Route::get('orders/{order}', [OnlineOrderController::class, 'show']);
+    Route::post('orders/{order}/confirm', [OnlineOrderController::class, 'confirm']);
+    Route::post('orders/{order}/ship', [OnlineOrderController::class, 'ship']);
+    Route::post('orders/{order}/cancel', [OnlineOrderController::class, 'cancel']);
+    Route::post('shipments/{shipment}/deliver', [OnlineOrderController::class, 'deliver']);
+     });
