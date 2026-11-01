@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\CashierShiftController;
 use App\Http\Controllers\Api\PosCheckoutController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PaymentController;
-
+   use App\Http\Controllers\Api\StockController;
 
 
 // Public routes
@@ -73,4 +73,5 @@ foreach (array_keys(config('crud')) as $slug) {
     Route::put("$slug/{id}", [CrudController::class, 'update'])->defaults('resource', $slug);
     Route::delete("$slug/{id}", [CrudController::class, 'destroy'])->defaults('resource', $slug);
 }
-});
+});   Route::get('stock/balances', [StockController::class, 'balances']);
+   Route::get('stock/transactions', [StockController::class, 'transactions']);
