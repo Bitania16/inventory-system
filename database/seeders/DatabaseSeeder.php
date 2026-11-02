@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
     UnitSeeder::class,
     StoreSeeder::class,
     PaymentMethodSeeder::class,
-]);
+    AdminUserSeeder::class,
+    ]);
 }
     }
